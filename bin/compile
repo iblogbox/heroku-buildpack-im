@@ -1,16 +1,12 @@
 #!/usr/bin/env bash
 
-function indent() {
-	c='s/^/       /'
-	case $(uname) in
-		Darwin) sed -l "$c";;
-		*)      sed -u "$c";;
-	esac
+indent() {
+  sed -u 's/^/       /'
 }
 
 BUILD_DIR="$1"
 SOURCE_DIR="$(dirname $0)/../compiled"
-TARGET_DIR="/app/vendor/bin"
+TARGET_DIR="$BUILD_DIR/vendor/bin"
 
 echo "-----> Copying files to $TARGET_DIR"
 
