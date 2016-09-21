@@ -183,3 +183,5 @@ make install
 
 cd libpng-1.6.18; ./configure --prefix=/app/vendor; make check
 cd libpng-1.6.18; make install
+
+./libpng-1.6.18/.libs/libpng16.so
