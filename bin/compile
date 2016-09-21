@@ -6,7 +6,7 @@ indent() {
 
 BUILD_DIR="$1"
 SOURCE_DIR="$(dirname $0)/../compiled"
-TARGET_DIR="$BUILD_DIR/vendor/bin"
+TARGET_DIR="$BUILD_DIR/vendor/im"
 
 echo "-----> Copying files to $TARGET_DIR"
 
@@ -38,6 +38,15 @@ mkdir -p "$TARGET_DIR"
 
 chmod +x "$SOURCE_DIR/bpgdec"
 cp "$SOURCE_DIR/bpgdec" "$TARGET_DIR"
-cp "$SOURCE_DIR/libpng16.so.16.18.0" "/usr/lib/"
-cp "$SOURCE_DIR/libpng16.so.16" "/usr/lib/"
-cp "$SOURCE_DIR/libpng16.so" "/usr/lib/"
+cp "$SOURCE_DIR/libpng16.so.16.18.0" "$TARGET_DIR"
+cp "$SOURCE_DIR/libpng16.so.16" "$TARGET_DIR"
+cp "$SOURCE_DIR/libpng16.so" "$TARGET_DIR"
+
+# update PATH and LD_LIBRARY_PATH
+echo "-----> Updating environment variables"
+PROFILE_PATH="$BUILD_DIR/.profile.d/im.sh"
+ACTUAL_INSTALL_PATH="$HOME/vendor/im"
+mkdir -p $(dirname $PROFILE_PATH)
+echo "export PATH=$ACTUAL_INSTALL_PATH/bin:\$PATH" >> $PROFILE_PATH
+echo "export LD_LIBRARY_PATH=$ACTUAL_INSTALL_PATH/lib:\$LD_LIBRARY_PATH" >> $PROFILE_PATH
+echo "export MAGICK_CONFIGURE_PATH=$ACTUAL_INSTALL_PATH" >> $PROFILE_PATH
