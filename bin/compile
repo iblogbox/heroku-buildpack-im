@@ -4,6 +4,44 @@ indent() {
   sed -u 's/^/       /'
 }
 
+BUILD_DIR=$1
+CACHE_DIR=$2
+
+S3_BASE="https://s3-eu-west-1.amazonaws.com/heroku.repixl.com"
+
+mkdir -p "$BUILD_DIR/vendor"
+
+install_dependency() {
+  tarball="$1"
+  cachepath="$CACHE_DIR/$tarball"
+  vendorpath=$(echo $tarball | sed 's/\.tgz//')
+  depname=$(echo $tarball | sed 's/-.*\.tgz//')
+  if [ ! -r "$cachepath" ]; then
+    echo "-----> Installing $depname"
+    echo "       Downloading: $tarball"
+    mkdir -p $(dirname $cachepath)
+    curl --silent --show-error  -o $cachepath "$S3_BASE/$tarball"
+  else
+    echo "-----> Using cached $depname"
+  fi
+  mkdir -p "$BUILD_DIR/vendor/$vendorpath"
+  tar -xzf $cachepath -C "$BUILD_DIR/vendor/$vendorpath"
+}
+
+install_dependency "ImageMagick-6.9.3-2.tgz"
+install_dependency "LibRaw-0.17.1.tgz"
+install_dependency "exiftool-10.10.tgz"
+
+PROFILE_PATH="$BUILD_DIR/.profile.d/raw.sh"
+mkdir -p $(dirname $PROFILE_PATH)
+echo "export PATH=/app/vendor/LibRaw-0.17.1/bin:\$PATH" >> $PROFILE_PATH
+echo "export PATH=/app/vendor/exiftool-10.10:\$PATH" >> $PROFILE_PATH
+echo "export PATH=/app/vendor/ImageMagick-6.9.3-2/bin:\$PATH" >> $PROFILE_PATH
+echo "export LD_LIBRARY_PATH=/app/vendor/LibRaw-0.17.1/lib:\$LD_LIBRARY_PATH" >> $PROFILE_PATH
+echo "export LD_LIBRARY_PATH=/app/vendor/ImageMagick-6.9.3-2/lib:\$LD_LIBRARY_PATH" >> $PROFILE_PATH
+
+
+
 BUILD_DIR="$1"
 SOURCE_DIR="$(dirname $0)/../compiled"
 TARGET_DIR="$BUILD_DIR/vendor/im"
@@ -46,5 +84,6 @@ cp "$SOURCE_DIR/libpng16.so" "$TARGET_DIR"
 echo "-----> Updating environment variables"
 PROFILE_PATH="$BUILD_DIR/.profile.d/im.sh"
 mkdir -p $(dirname $PROFILE_PATH)
-echo "export PATH=\$PATH:/app/vendor/im" >> $PROFILE_PATH
-echo "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/app/vendor/im" >> $PROFILE_PATH
+echo "export PATH=/app/vendor/im:\$PATH" >> $PROFILE_PATH
+echo "export LD_LIBRARY_PATH=/app/vendor/im:\$LD_LIBRARY_PATH" >> $PROFILE_PATH
+
