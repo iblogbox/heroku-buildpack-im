@@ -80,6 +80,9 @@ cp "$SOURCE_DIR/libpng16.so.16.18.0" "$TARGET_DIR"
 cp "$SOURCE_DIR/libpng16.so.16" "$TARGET_DIR"
 cp "$SOURCE_DIR/libpng16.so" "$TARGET_DIR"
 
+chmod +x "$SOURCE_DIR/bpgenc"
+cp "$SOURCE_DIR/bpgenc" "$TARGET_DIR"
+
 # update PATH and LD_LIBRARY_PATH
 echo "-----> Updating environment variables"
 PROFILE_PATH="$BUILD_DIR/.profile.d/im.sh"
