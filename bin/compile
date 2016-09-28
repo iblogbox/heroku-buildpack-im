@@ -115,4 +115,17 @@ curl $PACKAGE -L -s -o - | tar xzf - -C $LOCATION
 
 echo "-----> Building runtime environment for GhostXPS"
 mkdir -p $BUILD_DIR/.profile.d
-echo "export PATH=\"\$HOME/vendor/ghostxps:\$PATH\"" > $BUILD_DIR/.profile.d/ghostxps.sh
+echo "export PATH=\"\$HOME/vendor/ghostxps/ghostxps-9.20-linux-x86_64:\$PATH\"" > $BUILD_DIR/.profile.d/ghostxps.sh
+
+
+echo "-----> Installing GhostPCL"
+BUILD_DIR=$1
+PACKAGE="https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs920/ghostpcl-9.20-linux-x86_64.tgz"
+LOCATION="$BUILD_DIR/vendor/ghostpcl"
+
+mkdir -p $LOCATION
+curl $PACKAGE -L -s -o - | tar xzf - -C $LOCATION
+
+echo "-----> Building runtime environment for GhostPCL"
+mkdir -p $BUILD_DIR/.profile.d
+echo "export PATH=\"\$HOME/vendor/ghostpcl/ghostpcl-9.20-linux-x86_64:\$PATH\"" > $BUILD_DIR/.profile.d/ghostpcl.sh
