@@ -107,7 +107,7 @@ echo "export PATH=\"\$HOME/vendor/gs/bin:\$PATH\"" > $BUILD_DIR/.profile.d/ghost
 
 echo "-----> Installing Ghostscript 9.23"
 BUILD_DIR=$1
-PACKAGE="https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs923/ghostscript-9.23-linux-x86_64.tgz"
+PACKAGE="https://dl.getdropbox.com/s/n2384r4k0uge4no/ghostscript-9.23-linux-x86_64.tgz"
 LOCATION="$BUILD_DIR/vendor/gs/others"
 
 mkdir -p $LOCATION
